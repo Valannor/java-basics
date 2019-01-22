@@ -44,23 +44,54 @@ public class MyLinkedList<E> {
             return;
         }
 
+        Node<E> nodePrev = get(index).previous;
+        Node<E> node = new Node<>(element, nodePrev, nodePrev.next);
+        Node<E> nodeNext = node.next;
+
+        if (nodeNext != null)
+            nodeNext.previous = node;
+        nodePrev.next = node;
+        size++;
+    }
+
+    public Node<E> get(int index) {
+
+        if (index < 0 || index >= size)
+            throw new IndexOutOfBoundsException("Incorrect index!");
+
         Node<E> nodePrev = null;
-        for (int i = 0; i < index; i++) {
+        for (int i = 0; i <= index; i++) {
             if (i == 0)
                 nodePrev = first;
             else
                 nodePrev = nodePrev.next;
         }
 
-        if (nodePrev != null) {
-            Node<E> node = new Node<>(element, nodePrev, nodePrev.next);
-            Node<E> nodeNext = node.next;
+        return nodePrev;
+    }
 
-            if (nodeNext != null)
-                nodeNext.previous = node;
-            nodePrev.next = node;
-            size++;
+    public void set(int index, E element) {
+        Node<E> node = get(index);
+        node.value = element;
+    }
+
+    public E remove(int index) {
+        Node<E> node = get(index);
+
+        if (index == 0 && first != null)
+            first = first.next;
+        if (index == size - 1 && last != null)
+            last = last.previous;
+        if (index > 0 && index < size - 1) {
+            Node<E> prev = node.previous;
+            Node<E> next = node.next;
+            prev.next = next;
+            next.previous = prev;
         }
+
+        size--;
+
+        return node.value;
     }
 
     public void addFirst(E element) {
