@@ -35,18 +35,33 @@ public class MyArrayList<E> {
         size++;
     }
 
+    public void add(int index, E element) {
+
+        if (index < 0 || index > size)
+            throw new IndexOutOfBoundsException();
+
+        if (index == size) {
+            add(element);
+            return;
+        }
+
+        // TODO: 22.01.2019 Need to improve this part
+        ensureCapacity();
+        E[] temp = (E[]) new Object[capacity];
+        System.arraycopy(elements, 0, temp, 0, index);
+        temp[index] = element;
+        System.arraycopy(elements, index, temp, index + 1, elements.length - (index + 1));
+
+        elements = temp;
+        size++;
+    }
+
     private void ensureCapacity() {
         if (size >= capacity) {
             capacity = (capacity * 3) / 2 + 1;
 
-            E[] temp = (E[]) new Object[capacity];
-            addAll(elements, temp);
-            elements = temp;
+            elements = Arrays.copyOf(elements, capacity);
         }
-    }
-
-    private void addAll(E[] src, E[] dest) {
-        System.arraycopy(src, 0, dest, 0, src.length);
     }
 
     @Override

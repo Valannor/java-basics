@@ -24,6 +24,9 @@ public class TestApp {
         list.add("New 12");
 
         System.out.println(list);
+        list.add(5, "New 0");
+        System.out.println(list);
+
         System.out.println(list.size());
     }
 }
