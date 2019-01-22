@@ -1,12 +1,17 @@
 package com.practice;
 
 import com.practice.collection.MyArrayList;
+import com.practice.collection.MyLinkedList;
 
 import java.util.ArrayList;
 
 public class TestApp {
 
     public static void main(String[] args) {
+        testLinkedList();
+    }
+
+    public static void testArrayList() {
         String[] strings = {"a", "b", "c", "d", "e"};
 
         MyArrayList<String> list = new MyArrayList<>();
@@ -29,4 +34,21 @@ public class TestApp {
 
         System.out.println(list.size());
     }
+
+    public static void testLinkedList() {
+        MyLinkedList<String> list = new MyLinkedList<>();
+
+        list.add("New 1");
+        list.add("New 2");
+        list.add("New 3");
+        list.add("New 4");
+        list.add("New 5");
+
+        list.add(0, "New 0");
+
+        list.remove(0);
+
+        System.out.println(list);
+    }
+
 }

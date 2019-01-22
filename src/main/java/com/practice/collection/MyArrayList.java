@@ -1,7 +1,6 @@
 package com.practice.collection;
 
 import java.util.Arrays;
-import java.util.Iterator;
 
 public class MyArrayList<E> {
 
