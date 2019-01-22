@@ -38,7 +38,7 @@ public class MyArrayList<E> {
     public void add(int index, E element) {
 
         if (index < 0 || index > size)
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("Invalid index");
 
         if (index == size) {
             add(element);
@@ -54,6 +54,47 @@ public class MyArrayList<E> {
 
         elements = temp;
         size++;
+    }
+
+    public void set(int index, E element) {
+        if (index < 0 || index >= size)
+            throw new IndexOutOfBoundsException("Element doesn't exist");
+
+        elements[index] = element;
+    }
+
+    public E get(int index) {
+        if (index < 0 || index >= size)
+            throw new IndexOutOfBoundsException("Element doesn't exist");
+
+        return elements[index];
+    }
+
+    public E remove(int index) {
+        if (index < 0 || index >= size)
+            throw new IndexOutOfBoundsException("Element doesn't exist");
+
+        E element = elements[index];
+        System.arraycopy(elements, index + 1, elements, index, elements.length - (index + 1));
+
+        size--;
+
+        return element;
+    }
+
+    public int remove(E element) {
+
+        int index = 0;
+
+        for (int i = 0; i < size; i++) {
+            if (element.equals(elements[i])) {
+                index = i;
+                remove(i);
+                break;
+            }
+        }
+
+        return index;
     }
 
     private void ensureCapacity() {
