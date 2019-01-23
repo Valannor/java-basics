@@ -3,12 +3,12 @@ package com.practice;
 import com.practice.collection.MyArrayList;
 import com.practice.collection.MyLinkedList;
 
-import java.util.ArrayList;
-
 public class TestApp {
 
     public static void main(String[] args) {
-        testLinkedList();
+
+        testArrayList();
+//        testLinkedList();
     }
 
     public static void testArrayList() {
@@ -32,7 +32,11 @@ public class TestApp {
         list.add(5, "New 0");
         System.out.println(list);
 
-        System.out.println(list.size());
+//        System.out.println(list.size());
+
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println(list.get(i));
+        }
     }
 
     public static void testLinkedList() {
@@ -48,7 +52,11 @@ public class TestApp {
 
         list.remove(0);
 
-        System.out.println(list);
+//        System.out.println(list);
+
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println(list.get(i));
+        }
     }
 
 }

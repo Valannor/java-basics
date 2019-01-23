@@ -44,7 +44,7 @@ public class MyLinkedList<E> {
             return;
         }
 
-        Node<E> nodePrev = get(index).previous;
+        Node<E> nodePrev = getNode(index).previous;
         Node<E> node = new Node<>(element, nodePrev, nodePrev.next);
         Node<E> nodeNext = node.next;
 
@@ -54,7 +54,7 @@ public class MyLinkedList<E> {
         size++;
     }
 
-    public Node<E> get(int index) {
+    private Node<E> getNode(int index) {
 
         if (index < 0 || index >= size)
             throw new IndexOutOfBoundsException("Incorrect index!");
@@ -70,13 +70,17 @@ public class MyLinkedList<E> {
         return nodePrev;
     }
 
+    public E get(int index) {
+        return getNode(index).value;
+    }
+
     public void set(int index, E element) {
-        Node<E> node = get(index);
+        Node<E> node = getNode(index);
         node.value = element;
     }
 
     public E remove(int index) {
-        Node<E> node = get(index);
+        Node<E> node = getNode(index);
 
         if (index == 0 && first != null)
             first = first.next;
@@ -114,6 +118,10 @@ public class MyLinkedList<E> {
         last = node;
 
         size++;
+    }
+
+    public int size() {
+        return size;
     }
 
     @Override
