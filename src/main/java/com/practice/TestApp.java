@@ -1,14 +1,35 @@
 package com.practice;
 
 import com.practice.collection.MyArrayList;
+import com.practice.collection.MyHashMap;
 import com.practice.collection.MyLinkedList;
 
 public class TestApp {
 
     public static void main(String[] args) {
 
-        testArrayList();
+//        testArrayList();
 //        testLinkedList();
+        testHashMap();
+    }
+
+    private static void testHashMap() {
+
+        MyHashMap<String, String> map = new MyHashMap<>();
+        map.put("Key 0", "Value 0");
+        map.put("Key 1", "Value 1");
+        map.put("Key 2", "Value 2");
+        map.put("Key 3", "Value 3");
+        map.put("Key 4", "Value 4");
+
+        map.put("Key 0", "Value 9");
+
+        System.out.println(map);
+
+        System.out.println(map.size());
+
+        System.out.println(map.get("Key"));
+        System.out.println(map.get("Key 0"));
     }
 
     public static void testArrayList() {
