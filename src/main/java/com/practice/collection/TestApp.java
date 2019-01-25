@@ -1,4 +1,4 @@
-package com.practice;
+package com.practice.collection;
 
 import com.practice.collection.MyArrayList;
 import com.practice.collection.MyHashMap;
