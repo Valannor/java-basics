@@ -103,6 +103,10 @@ public class MyLinkedList<E> {
 
         if (first != null)
             first.previous = node;
+        else {
+            add(element);
+            return;
+        }
 
         first = node;
 
@@ -114,6 +118,10 @@ public class MyLinkedList<E> {
 
         if (last != null)
             last.next = node;
+        else {
+            add(element);
+            return;
+        }
 
         last = node;
 

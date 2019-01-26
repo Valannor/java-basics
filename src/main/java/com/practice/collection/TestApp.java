@@ -5,8 +5,8 @@ public class TestApp {
     public static void main(String[] args) {
 
 //        testArrayList();
-//        testLinkedList();
-        testHashMap();
+        testLinkedList();
+//        testHashMap();
     }
 
     private static void testHashMap() {
@@ -36,7 +36,6 @@ public class TestApp {
     }
 
     public static void testArrayList() {
-        String[] strings = {"a", "b", "c", "d", "e"};
 
         MyArrayList<String> list = new MyArrayList<>();
         list.add("New 1");
@@ -49,18 +48,31 @@ public class TestApp {
         list.add("New 8");
         list.add("New 9");
         list.add("New 10");
+        System.out.println("10 elements added: " + list);
+
         list.add("New 11");
         list.add("New 12");
+        System.out.println("2 more elements added (for list capacity check): " + list);
 
-        System.out.println(list);
+        System.out.println("List size: " + list.size());
+
+        System.out.println("Get by index 10: " + list.get(10));
+
         list.add(5, "New 0");
-        System.out.println(list);
+        System.out.println("After adding \"New 0\" in the middle of the list (index 5): " + list);
+        System.out.println("List size: " + list.size());
 
-//        System.out.println(list.size());
+        System.out.println("Removing element located in index 5 position: " + list.remove(5));
+        System.out.println("Removing element \"New 12\" position: " + list.remove("New 12"));
+        System.out.println("Removing not existing element \"Newwww\": " + list.remove("Newwww"));
+        System.out.println("After remove operations: " + list);
 
-        for (int i = 0; i < list.size(); i++) {
-            System.out.println(list.get(i));
-        }
+        list.set(10, "Old");
+        System.out.println("Set value \"Old\" in index 10 (contains \"New 11\"): " + list);
+
+
+        String[] strings = {"a", "b", "c", "d", "e"};
+        System.out.println("Creating list using array: " + new MyArrayList<>(strings));
     }
 
     public static void testLinkedList() {
@@ -71,16 +83,17 @@ public class TestApp {
         list.add("New 3");
         list.add("New 4");
         list.add("New 5");
+        System.out.println("5 elements added to list: " + list);
 
         list.add(0, "New 0");
+        System.out.println("\"New 0\" added in position 0: " + list);
 
         list.remove(0);
+        System.out.println("Removing element by index 0: " + list);
 
-//        System.out.println(list);
-
-        for (int i = 0; i < list.size(); i++) {
-            System.out.println(list.get(i));
-        }
+        list.addLast("Last");
+        list.addFirst("First");
+        System.out.println("addFirst and addLast methods used: " + list);
     }
 
 }
