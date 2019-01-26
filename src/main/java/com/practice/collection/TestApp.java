@@ -1,9 +1,5 @@
 package com.practice.collection;
 
-import com.practice.collection.MyArrayList;
-import com.practice.collection.MyHashMap;
-import com.practice.collection.MyLinkedList;
-
 public class TestApp {
 
     public static void main(String[] args) {
@@ -21,15 +17,22 @@ public class TestApp {
         map.put("Key 2", "Value 2");
         map.put("Key 3", "Value 3");
         map.put("Key 4", "Value 4");
+        map.put(null, "Value 4");
+        System.out.println("Map after initialisation: " + map);
 
         map.put("Key 0", "Value 9");
+        System.out.println("Map after second put for key \"Key 0\" : " + map);
 
-        System.out.println(map);
+        System.out.println("Map size: " + map.size());
 
-        System.out.println(map.size());
+        System.out.println("Get for not existing key \"Key\": " + map.get("Key"));
+        System.out.println("Get for existing key \"Key 0\": " + map.get("Key 0"));
 
-        System.out.println(map.get("Key"));
-        System.out.println(map.get("Key 0"));
+        System.out.println("Return of removal result for not existing key \"Key\": " + map.remove("Key"));
+        System.out.println("Return of removal result for existing key \"Key 0\": " + map.remove("Key 0"));
+
+        System.out.println("Map after all operations: " + map);
+        System.out.println("Map size after all operations: " + map.size());
     }
 
     public static void testArrayList() {

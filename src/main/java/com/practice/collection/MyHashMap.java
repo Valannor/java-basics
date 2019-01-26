@@ -113,17 +113,11 @@ public class MyHashMap<K, V> {
         size++;
     }
 
-    // TODO: 25.01.2019  
     public V remove(K key) {
         int hash = hash(key);
-        int bucketIndex = bucketIndex(hash);
-        
-        Pair<K, V> root = elementData[bucketIndex];
-        Pair<K, V> occurrence = checkOccurrence(root, hash, key);
-        
-//        if (occurrence != null)
-        
-        return null;
+        Pair<K, V> result = removePair(hash, key);
+
+        return result == null ? null : result.value;
     }
 
     private Pair<K, V> checkOccurrence(Pair<K, V> root, int hash, K key) {
@@ -137,6 +131,34 @@ public class MyHashMap<K, V> {
                 result = temp;
                 break;
             }
+            temp = temp.next;
+        }
+
+        return result;
+    }
+
+    private Pair<K, V> removePair(int hash, K key) {
+
+        int bucketIndex = bucketIndex(hash);
+
+        Pair<K, V> parent = null;
+        Pair<K, V> temp = elementData[bucketIndex];
+        Pair<K, V> result = null;
+        while (temp != null) {
+
+            if (key == null && temp.key == null
+                    || temp.hash == hash && temp.key.equals(key)) {
+                result = temp;
+
+                if (parent == null) {
+                    elementData[bucketIndex] = result.next;
+                } else {
+                    parent.next = result.next;
+                }
+                size--;
+                break;
+            }
+            parent = temp;
             temp = temp.next;
         }
 
