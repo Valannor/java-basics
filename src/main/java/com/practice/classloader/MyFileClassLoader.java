@@ -1,7 +1,6 @@
 package com.practice.classloader;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,6 +29,8 @@ public class MyFileClassLoader extends ClassLoader {
 
         byte[] classToLoad = readClassFromFile(className);
 
+        if (classToLoad == null) throw new ClassNotFoundException();
+
         return defineClass(className, classToLoad, 0, classToLoad.length);
     }
 
@@ -48,7 +49,7 @@ public class MyFileClassLoader extends ClassLoader {
         return null;
     }
 
-    public static void main(String[] args) throws ClassNotFoundException, MalformedURLException {
+    public static void main(String[] args) throws ClassNotFoundException {
 
         String className = "src.main.resources.ConsoleHelper";
 
