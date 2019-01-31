@@ -1,32 +1,59 @@
 package com.practice.classloader;
 
-import java.net.URL;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-public class MyFileClassLoader extends ClassLoader{
+public class MyFileClassLoader extends ClassLoader {
 
+    @Override
+    public Class<?> loadClass(String className) throws ClassNotFoundException {
 
-    public Class<?> loadClass(String className, String fileLocation) throws ClassNotFoundException {
-        return this.loadClass(className, false);
+        return loadClass(className, false);
     }
 
     @Override
-    protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
-        return super.loadClass(name, resolve);
+    protected Class<?> loadClass(String className, boolean resolve) throws ClassNotFoundException {
+
+        Class<?> result = findClass(className);
+        if (resolve) {
+            resolveClass(result);
+        }
+
+        return result;
     }
 
     @Override
-    protected Class<?> findClass(String name) throws ClassNotFoundException {
-        return super.findClass(name);
+    protected Class<?> findClass(String className) throws ClassNotFoundException {
+
+        byte[] classToLoad = readClassFromFile(className);
+
+        return defineClass(className, classToLoad, 0, classToLoad.length);
     }
 
-    @Override
-    public URL getResource(String name) {
-        return super.getResource(name);
+    private byte[] readClassFromFile(String className) {
+
+        try {
+
+            String directoryName = className.replace(".", "/").concat(".class");
+            Path fileLocation = Paths.get(directoryName);
+            return Files.readAllBytes(fileLocation);
+
+        } catch (IOException e) {
+            System.err.println("Incorrect path");
+        }
+
+        return null;
     }
 
-    @Override
-    protected URL findResource(String name) {
-        return super.findResource(name);
-    }
+    public static void main(String[] args) throws ClassNotFoundException, MalformedURLException {
 
+        String className = "src.main.resources.ConsoleHelper";
+
+        MyFileClassLoader loader = new MyFileClassLoader();
+        Class consoleHelper = Class.forName(className, true, loader);
+
+    }
 }
