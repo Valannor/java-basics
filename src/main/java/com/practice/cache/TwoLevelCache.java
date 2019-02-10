@@ -1,4 +1,4 @@
 package com.practice.cache;
 
-public class Data {
+public class TwoLevelCache {
 }
