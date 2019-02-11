@@ -18,5 +18,5 @@ public abstract class Strategy {
         this.sizeLimit = sizeLimit;
     }
 
-    public abstract <E> Comparator<E> getStrategyComparator();
+//    public abstract <E> Comparator<E> getStrategyComparator();
 }

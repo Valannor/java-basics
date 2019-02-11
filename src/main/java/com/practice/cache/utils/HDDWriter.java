@@ -58,14 +58,17 @@ public class HDDWriter implements CacheWriter {
             File directory = new File(path);
             File[] files = directory.listFiles();
 
+            // TODO: 11.02.2019 Check if it works correctly and move to another class
             if (files != null) {
-                Arrays.sort(files, strategy.getStrategyComparator());
-            }
+                Arrays.sort(files,
+                        (o1, o2) -> Long.valueOf(o1.lastModified()).compareTo(o2.lastModified())
+                );
 
-            while (aboveLimit > 0) {
-                for (File file : files) {
-                    aboveLimit -= file.length();
-                    file.delete();
+                while (aboveLimit > 0) {
+                    for (File file : files) {
+                        aboveLimit -= file.length();
+                        file.delete();
+                    }
                 }
             }
         }

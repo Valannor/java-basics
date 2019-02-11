@@ -1,4 +1,11 @@
 package com.practice.cache.strategy;
 
-public class LRUStrategy {
+import java.util.Comparator;
+
+public class LRUStrategy extends Strategy{
+
+    public LRUStrategy(int sizeLimit) {
+        super(sizeLimit);
+    }
+
 }
