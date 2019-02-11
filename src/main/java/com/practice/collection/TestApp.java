@@ -11,7 +11,7 @@ public class TestApp {
 
     private static void testHashMap() {
 
-        MyHashMap<String, String> map = new MyHashMap<>();
+        HashMap<String, String> map = new HashMap<>();
         map.put("Key 0", "Value 0");
         map.put("Key 1", "Value 1");
         map.put("Key 2", "Value 2");
@@ -37,7 +37,7 @@ public class TestApp {
 
     public static void testArrayList() {
 
-        MyArrayList<String> list = new MyArrayList<>();
+        ArrayList<String> list = new ArrayList<>();
         list.add("New 1");
         list.add("New 2");
         list.add("New 3");
@@ -72,11 +72,11 @@ public class TestApp {
 
 
         String[] strings = {"a", "b", "c", "d", "e"};
-        System.out.println("Creating list using array: " + new MyArrayList<>(strings));
+        System.out.println("Creating list using array: " + new ArrayList<>(strings));
     }
 
     public static void testLinkedList() {
-        MyLinkedList<String> list = new MyLinkedList<>();
+        LinkedList<String> list = new LinkedList<>();
 
         list.add("New 1");
         list.add("New 2");

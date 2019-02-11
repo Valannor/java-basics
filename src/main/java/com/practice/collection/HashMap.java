@@ -2,7 +2,13 @@ package com.practice.collection;
 
 import java.util.Objects;
 
-public class MyHashMap<K, V> {
+/**
+ * HashMap class represents raw implementation of classic associated array.
+ *
+ * @param <K> stands for key element type.
+ * @param <V> stands for value element type.
+ */
+public class HashMap<K, V> {
 
     private int size;
     private int capacity;
@@ -13,19 +19,19 @@ public class MyHashMap<K, V> {
 
     private Pair<K, V>[] elementData;
 
-    public MyHashMap(int capacity, double loadFactor) {
+    public HashMap(int capacity, double loadFactor) {
         init(capacity, loadFactor);
     }
 
-    public MyHashMap(int capacity) {
+    public HashMap(int capacity) {
         this(capacity, DEFAULT_LOAD_FACTOR);
     }
 
-    public MyHashMap(double loadFactor) {
+    public HashMap(double loadFactor) {
         this(DEFAULT_CAPACITY, loadFactor);
     }
 
-    public MyHashMap() {
+    public HashMap() {
         this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
     }
 
@@ -64,7 +70,7 @@ public class MyHashMap<K, V> {
         public boolean equals(Object o) {
             if (this == o)
                 return true;
-            if (o instanceof MyHashMap.Pair) {
+            if (o instanceof HashMap.Pair) {
                 Pair<?, ?> pair = (Pair<?, ?>) o;
                 if (Objects.equals(key, pair.getKey()) &&
                         Objects.equals(value, pair.getValue()))

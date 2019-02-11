@@ -1,6 +1,12 @@
 package com.practice.collection;
 
-public class MyLinkedList<E> {
+
+/**
+ * LinkedList class is a raw implementation of classic data structure with the same name.
+ *
+ * @param <E> stands for type of elements, that list can contain
+ */
+public class LinkedList<E> {
 
     private int size;
     private Node<E> first;

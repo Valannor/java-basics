@@ -5,7 +5,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class MyFileClassLoader extends ClassLoader {
+/**
+ * FileClassLoader is a class, that extends functionality of the java.lang.ClassLoader.
+ * This implementation is responsible for dynamic class loading.
+ */
+public class FileClassLoader extends java.lang.ClassLoader {
 
     @Override
     public Class<?> loadClass(String className) throws ClassNotFoundException {
@@ -47,14 +51,5 @@ public class MyFileClassLoader extends ClassLoader {
         }
 
         return null;
-    }
-
-    public static void main(String[] args) throws ClassNotFoundException {
-
-        String className = "src.main.resources.ConsoleHelper";
-
-        MyFileClassLoader loader = new MyFileClassLoader();
-        Class consoleHelper = Class.forName(className, true, loader);
-
     }
 }

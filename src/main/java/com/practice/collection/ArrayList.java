@@ -2,7 +2,12 @@ package com.practice.collection;
 
 import java.util.Arrays;
 
-public class MyArrayList<E> {
+/**
+ * ArrayList class represents raw implementation of the classic data structure - list on array.
+ *
+ * @param <E> stands for type of elements that ArrayList will contain.
+ */
+public class ArrayList<E> {
 
     private static final int DEFAULT_CAPACITY = 10;
 
@@ -11,16 +16,16 @@ public class MyArrayList<E> {
     private int capacity;
     private int size;
 
-    public MyArrayList() {
+    public ArrayList() {
         this(DEFAULT_CAPACITY);
     }
 
-    public MyArrayList(int capacity) {
+    public ArrayList(int capacity) {
         this.capacity = capacity;
         elements = (E[]) new Object[capacity];
     }
 
-    public MyArrayList(E[] source) {
+    public ArrayList(E[] source) {
         this.elements = source;
 
         capacity = (source.length * 3) / 2 + 1;
