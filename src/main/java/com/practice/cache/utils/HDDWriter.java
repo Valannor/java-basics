@@ -1,6 +1,6 @@
 package com.practice.cache.utils;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,29 +13,31 @@ public class HDDWriter {
         this.path = path;
     }
 
-    public void write(String name, byte[] data) {
+    public void write(String name, Data data) throws IOException {
 
-        try {
-            Files.write(Paths.get(path + "/" + name), data);
-
+        Path fileLocation = Paths.get(path + "/" + name);
+        try (ObjectOutputStream outputStream
+                     = new ObjectOutputStream(Files.newOutputStream(fileLocation))) {
+            outputStream.writeObject(data);
         } catch (IOException e) {
-            e.printStackTrace();
+            Files.createDirectories(Paths.get(path));
+            write(name, data);
         }
-
     }
 
-    // TODO: 11.02.2019 Has to return Data
-    public byte[] read(String name) {
+    public Data read(String name) {
+        Data result = null;
 
-        byte[] data = null;
-        try {
-            Path fileLocation = Paths.get(path + "/" + name);
-            data = Files.readAllBytes(fileLocation);
-        } catch (IOException e) {
+        Path fileLocation = Paths.get(path + "/" + name);
+        try (ObjectInputStream inputStream
+                     = new ObjectInputStream(Files.newInputStream(fileLocation))) {
+            result = (Data) inputStream.readObject();
+        } catch (ClassCastException
+                | ClassNotFoundException
+                | IOException e) {
             e.printStackTrace();
         }
 
-        return data;
-
+        return result;
     }
 }
