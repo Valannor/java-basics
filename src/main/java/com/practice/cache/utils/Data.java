@@ -2,7 +2,7 @@ package com.practice.cache.utils;
 
 import java.io.Serializable;
 
-public class Data implements Serializable{
+public final class Data implements Serializable{
 
     private final String value;
 

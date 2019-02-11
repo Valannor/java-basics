@@ -1,19 +1,52 @@
-package com.practice.cache.utils;
+package com.practice.cache.writer;
 
-import com.practice.cache.strategy.Strategy;
+import com.practice.cache.utils.Data;
+import com.practice.cache.utils.Strategy;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Comparator;
 
-public class HDDWriter implements CacheWriter {
+public class HDDWriter implements CacheWriter<File> {
 
     private String path;
+    private long sizeLimit;
+    private Strategy strategy;
 
-    public HDDWriter(String path) {
+    private static Comparator LRUComparator = (Comparator<File>) (f1, f2) -> Long.compare(f1.lastModified(), f2.lastModified());
+    private static Comparator MRUComparator = (Comparator<File>) (f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified());
+
+    public HDDWriter(String path, long sizeLimit, Strategy strategy) {
         this.path = path;
+        this.sizeLimit = sizeLimit;
+        this.strategy = strategy;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public long getSizeLimit() {
+        return sizeLimit;
+    }
+
+    public void setSizeLimit(long sizeLimit) {
+        this.sizeLimit = sizeLimit;
+    }
+
+    public Strategy getStrategy() {
+        return strategy;
+    }
+
+    public void setStrategy(Strategy strategy) {
+        this.strategy = strategy;
     }
 
     @Override
@@ -47,22 +80,23 @@ public class HDDWriter implements CacheWriter {
     }
 
     @Override
-    public void invalidateUnused(Strategy strategy) throws IOException {
+    public void invalidateUnused() throws IOException {
 
         long currentSize = getCurrentSize();
 
-        if (currentSize > strategy.getSizeLimit()) {
+        if (currentSize > this.sizeLimit) {
 
-            long aboveLimit = currentSize - strategy.getSizeLimit();
+            long aboveLimit = currentSize - this.sizeLimit;
 
             File directory = new File(path);
             File[] files = directory.listFiles();
 
-            // TODO: 11.02.2019 Check if it works correctly and move to another class
             if (files != null) {
-                Arrays.sort(files,
-                        (o1, o2) -> Long.valueOf(o1.lastModified()).compareTo(o2.lastModified())
-                );
+
+                if (strategy == Strategy.LRU)
+                    Arrays.sort(files, LRUComparator);
+                if (strategy == Strategy.MRU)
+                    Arrays.sort(files, MRUComparator);
 
                 while (aboveLimit > 0) {
                     for (File file : files) {
