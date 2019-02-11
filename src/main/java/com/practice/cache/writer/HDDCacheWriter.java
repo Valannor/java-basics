@@ -9,8 +9,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Date;
 
-public class HDDWriter implements CacheWriter<File> {
+public class HDDCacheWriter extends CacheWriter {
 
     private String path;
     private long sizeLimit;
@@ -19,7 +20,7 @@ public class HDDWriter implements CacheWriter<File> {
     private static Comparator LRUComparator = (Comparator<File>) (f1, f2) -> Long.compare(f1.lastModified(), f2.lastModified());
     private static Comparator MRUComparator = (Comparator<File>) (f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified());
 
-    public HDDWriter(String path, long sizeLimit, Strategy strategy) {
+    public HDDCacheWriter(String path, long sizeLimit, Strategy strategy) {
         this.path = path;
         this.sizeLimit = sizeLimit;
         this.strategy = strategy;
@@ -60,6 +61,8 @@ public class HDDWriter implements CacheWriter<File> {
             Files.createDirectories(Paths.get(path));
             write(name, data);
         }
+
+        super.write(name, data);
     }
 
     @Override
@@ -69,7 +72,12 @@ public class HDDWriter implements CacheWriter<File> {
         Path fileLocation = Paths.get(path + "/" + name);
         try (ObjectInputStream inputStream
                      = new ObjectInputStream(Files.newInputStream(fileLocation))) {
+
             result = (Data) inputStream.readObject();
+            result.setDate(new Date());
+
+            fileLocation.toFile().delete();
+
         } catch (ClassCastException
                 | ClassNotFoundException
                 | IOException e) {
@@ -80,7 +88,7 @@ public class HDDWriter implements CacheWriter<File> {
     }
 
     @Override
-    public void invalidateUnused() throws IOException {
+    protected void invalidateUnused() throws IOException {
 
         long currentSize = getCurrentSize();
 

@@ -1,11 +1,19 @@
 package com.practice.cache.writer;
 
 import com.practice.cache.utils.Data;
-import com.practice.cache.utils.Strategy;
 
-public interface CacheWriter<T> {
-    void write(String name, Data data) throws Exception;
-    Data read(String name);
-    void invalidateUnused() throws Exception;
-    void invalidateAll();
+import java.io.IOException;
+
+public abstract class CacheWriter {
+
+    public void write(String name, Data data) throws IOException {
+        invalidateUnused();
+    }
+
+    public abstract Data read(String name);
+
+    protected abstract void invalidateUnused() throws IOException;
+
+    public abstract void invalidateAll();
+
 }
