@@ -14,6 +14,8 @@ public abstract class CacheWriter {
 
     protected abstract void invalidateUnused() throws IOException;
 
+    public abstract void invalidateByName(String name) throws IOException;
+
     public abstract void invalidateAll();
 
 }

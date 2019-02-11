@@ -125,6 +125,12 @@ public class HDDCacheWriter extends CacheWriter {
     }
 
     @Override
+    public void invalidateByName(String name) throws IOException {
+        Path fileLocation = Paths.get(path + "/" + name);
+        fileLocation.toFile().delete();
+    }
+
+    @Override
     public void invalidateAll() {
         File directory = new File(path);
         File[] files = directory.listFiles();

@@ -30,6 +30,9 @@ public class RAMCacheWriter extends CacheWriter {
 
     @Override
     public void write(String name, Data data) throws IOException {
+        if (hddCacheWriter != null) {
+            hddCacheWriter.read(name);
+        }
         cache.put(new SoftReference<>(name), data);
         super.write(name, data);
     }
@@ -67,7 +70,18 @@ public class RAMCacheWriter extends CacheWriter {
     }
 
     @Override
+    public void invalidateByName(String name) throws IOException {
+        Data data = cache.remove(new SoftReference<>(name));
+        if (data == null && hddCacheWriter != null) {
+            hddCacheWriter.invalidateByName(name);
+        }
+    }
+
+    @Override
     public void invalidateAll() {
         cache.clear();
+        if (hddCacheWriter != null) {
+            hddCacheWriter.invalidateAll();
+        }
     }
 }
