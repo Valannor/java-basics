@@ -16,5 +16,7 @@ public class Test {
 
         Data test = writer.read("Test");
         System.out.println(test);
+
+//        writer.invalidateUnused();
     }
 }
