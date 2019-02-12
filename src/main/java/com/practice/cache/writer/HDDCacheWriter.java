@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Map;
 
 public class HDDCacheWriter extends CacheWriter {
 
@@ -88,7 +89,7 @@ public class HDDCacheWriter extends CacheWriter {
     }
 
     @Override
-    protected void invalidateUnused() throws IOException {
+    protected Map<String, Data> invalidateUnused() throws IOException {
 
         long currentSize = getCurrentSize();
 
@@ -114,6 +115,7 @@ public class HDDCacheWriter extends CacheWriter {
                 }
             }
         }
+        return null;
     }
 
     private long getCurrentSize() throws IOException {
@@ -125,9 +127,9 @@ public class HDDCacheWriter extends CacheWriter {
     }
 
     @Override
-    public void invalidateByName(String name) throws IOException {
+    public boolean invalidateByName(String name) throws IOException {
         Path fileLocation = Paths.get(path + "/" + name);
-        fileLocation.toFile().delete();
+        return fileLocation.toFile().delete();
     }
 
     @Override

@@ -11,16 +11,12 @@ import java.util.Map;
 public class RAMCacheWriter extends CacheWriter {
 
     private int sizeLimit;
-    private HDDCacheWriter hddCacheWriter;
+    private Strategy strategy;
     private LinkedHashMap<SoftReference<String>, Data> cache;
 
     public RAMCacheWriter(int sizeLimit, Strategy strategy) {
-        this(sizeLimit, strategy, null);
-    }
-
-    public RAMCacheWriter(int sizeLimit, Strategy strategy, HDDCacheWriter hddCacheWriter) {
         this.sizeLimit = sizeLimit;
-        this.hddCacheWriter = hddCacheWriter;
+        this.strategy = strategy;
 
         boolean accessOrder = false;
         if (strategy == Strategy.MRU)
@@ -28,60 +24,59 @@ public class RAMCacheWriter extends CacheWriter {
         this.cache = new LinkedHashMap<>(16, 0.75f, accessOrder);
     }
 
+    public int getSizeLimit() {
+        return sizeLimit;
+    }
+
+    public void setSizeLimit(int sizeLimit) {
+        this.sizeLimit = sizeLimit;
+    }
+
+    public Strategy getStrategy() {
+        return strategy;
+    }
+
+    public void setStrategy(Strategy strategy) {
+        this.strategy = strategy;
+    }
+
     @Override
     public void write(String name, Data data) throws IOException {
-        if (hddCacheWriter != null) {
-            hddCacheWriter.read(name);
-        }
         cache.put(new SoftReference<>(name), data);
-        super.write(name, data);
     }
 
     @Override
     public Data read(String name) {
-        Data result = cache.get(new SoftReference<>(name));
-        if (result == null && hddCacheWriter != null) {
-            result = hddCacheWriter.read(name);
-            if (result != null) {
-                cache.put(new SoftReference<>(name), result);
-            }
-        }
-
-        return result;
+        return cache.get(new SoftReference<>(name));
     }
 
     @Override
-    protected void invalidateUnused() throws IOException {
+    public Map<String, Data> invalidateUnused() throws IOException {
+        Map<String, Data> unUsed = null;
         if (cache.size() == sizeLimit) {
-
+            unUsed = new LinkedHashMap<>();
             int counter = sizeLimit / 3;
             for (Map.Entry<SoftReference<String>, Data> pair : cache.entrySet()) {
                 SoftReference<String> key = pair.getKey();
                 Data data = cache.remove(key);
+                unUsed.put(key.get(), data);
 
-                if (hddCacheWriter != null) {
-                    hddCacheWriter.write(key.get(), data);
-                }
                 counter--;
                 if (counter <= 0)
                     break;
             }
         }
+        return unUsed;
     }
 
     @Override
-    public void invalidateByName(String name) throws IOException {
+    public boolean invalidateByName(String name) throws IOException {
         Data data = cache.remove(new SoftReference<>(name));
-        if (data == null && hddCacheWriter != null) {
-            hddCacheWriter.invalidateByName(name);
-        }
+        return data != null;
     }
 
     @Override
     public void invalidateAll() {
         cache.clear();
-        if (hddCacheWriter != null) {
-            hddCacheWriter.invalidateAll();
-        }
     }
 }

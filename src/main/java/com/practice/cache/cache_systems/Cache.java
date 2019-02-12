@@ -4,7 +4,7 @@ import com.practice.cache.utils.Data;
 
 public interface Cache {
     void add(String name, Data data);
-    void read(String name);
+    Data read(String name);
     void remove(String name);
     void removeAll();
 }
