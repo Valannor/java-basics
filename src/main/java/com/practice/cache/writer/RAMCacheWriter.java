@@ -8,7 +8,7 @@ import java.lang.ref.SoftReference;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class RAMCacheWriter extends CacheWriter {
+public class RAMCacheWriter implements CacheWriter {
 
     private int sizeLimit;
     private Strategy strategy;
@@ -36,10 +36,6 @@ public class RAMCacheWriter extends CacheWriter {
         return strategy;
     }
 
-    public void setStrategy(Strategy strategy) {
-        this.strategy = strategy;
-    }
-
     @Override
     public void write(String name, Data data) throws IOException {
         cache.put(new SoftReference<>(name), data);
@@ -53,7 +49,7 @@ public class RAMCacheWriter extends CacheWriter {
     @Override
     public Map<String, Data> invalidateUnused() throws IOException {
         Map<String, Data> unUsed = null;
-        if (cache.size() == sizeLimit) {
+        if (cache.size() >= sizeLimit) {
             unUsed = new LinkedHashMap<>();
             int counter = sizeLimit / 3;
             for (Map.Entry<SoftReference<String>, Data> pair : cache.entrySet()) {

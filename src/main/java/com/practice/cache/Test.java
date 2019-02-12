@@ -11,14 +11,12 @@ public class Test {
 
     public static void main(String[] args) throws IOException {
         Data data = new Data("Test");
-        System.out.println(data.getDate());
 
         String path = "src/main/resources/serialized";
         HDDCacheWriter writer = new HDDCacheWriter(path, 1000, Strategy.LRU);
         writer.write("Test", data);
 
         Data test = writer.read("Test");
-        System.out.println(test + " - " + test.getDate());
 
         new RAMCacheWriter(1000, Strategy.LRU).write("Test", data);
     }

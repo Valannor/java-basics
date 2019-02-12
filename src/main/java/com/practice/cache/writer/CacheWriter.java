@@ -5,18 +5,16 @@ import com.practice.cache.utils.Data;
 import java.io.IOException;
 import java.util.Map;
 
-public abstract class CacheWriter {
+public interface CacheWriter {
 
-    public void write(String name, Data data) throws IOException {
-        invalidateUnused();
-    }
+    void write(String name, Data data) throws IOException;
 
-    public abstract Data read(String name);
+    Data read(String name);
 
-    protected abstract Map<String, Data> invalidateUnused() throws IOException;
+    Map<String, Data> invalidateUnused() throws IOException;
 
-    public abstract boolean invalidateByName(String name) throws IOException;
+    boolean invalidateByName(String name) throws IOException;
 
-    public abstract void invalidateAll();
+    void invalidateAll();
 
 }

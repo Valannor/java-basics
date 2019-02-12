@@ -9,14 +9,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.Map;
 
-public class HDDCacheWriter extends CacheWriter {
+public class HDDCacheWriter implements CacheWriter {
 
     private String path;
     private long sizeLimit;
     private Strategy strategy;
+    private long currentSize;
 
     private static Comparator LRUComparator = (Comparator<File>) (f1, f2) -> Long.compare(f1.lastModified(), f2.lastModified());
     private static Comparator MRUComparator = (Comparator<File>) (f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified());
@@ -53,7 +53,6 @@ public class HDDCacheWriter extends CacheWriter {
 
     @Override
     public void write(String name, Data data) throws IOException {
-
         Path fileLocation = Paths.get(path + "/" + name);
         try (ObjectOutputStream outputStream
                      = new ObjectOutputStream(Files.newOutputStream(fileLocation))) {
@@ -61,9 +60,11 @@ public class HDDCacheWriter extends CacheWriter {
         } catch (IOException e) {
             Files.createDirectories(Paths.get(path));
             write(name, data);
+            return;
         }
-
-        super.write(name, data);
+        currentSize += fileLocation.toFile().length();
+        System.out.println(currentSize);
+        invalidateUnused();
     }
 
     @Override
@@ -75,8 +76,6 @@ public class HDDCacheWriter extends CacheWriter {
                      = new ObjectInputStream(Files.newInputStream(fileLocation))) {
 
             result = (Data) inputStream.readObject();
-            result.setDate(new Date());
-
             fileLocation.toFile().delete();
 
         } catch (ClassCastException
@@ -84,18 +83,12 @@ public class HDDCacheWriter extends CacheWriter {
                 | IOException e) {
             e.printStackTrace();
         }
-
         return result;
     }
 
     @Override
-    protected Map<String, Data> invalidateUnused() throws IOException {
-
-        long currentSize = getCurrentSize();
-
-        if (currentSize > this.sizeLimit) {
-
-            long aboveLimit = currentSize - this.sizeLimit;
+    public Map<String, Data> invalidateUnused() throws IOException {
+        if (currentSize >= this.sizeLimit) {
 
             File directory = new File(path);
             File[] files = directory.listFiles();
@@ -107,9 +100,9 @@ public class HDDCacheWriter extends CacheWriter {
                 if (strategy == Strategy.MRU)
                     Arrays.sort(files, MRUComparator);
 
-                while (aboveLimit > 0) {
+                while (currentSize > sizeLimit / 2) {
                     for (File file : files) {
-                        aboveLimit -= file.length();
+                        currentSize -= file.length();
                         file.delete();
                     }
                 }
@@ -118,7 +111,7 @@ public class HDDCacheWriter extends CacheWriter {
         return null;
     }
 
-    private long getCurrentSize() throws IOException {
+    public long ensureCurrentSize() throws IOException {
         Path directory = Paths.get(path);
         return Files.walk(directory)
                 .filter(p -> p.toFile().isFile())
