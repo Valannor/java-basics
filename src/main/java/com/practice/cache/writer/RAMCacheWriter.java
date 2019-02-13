@@ -47,7 +47,7 @@ public class RAMCacheWriter implements CacheWriter {
     }
 
     @Override
-    public Map<String, Data> invalidateUnused() throws IOException {
+    public Map<String, Data> invalidateUnused() {
         Map<String, Data> unUsed = null;
         if (cache.size() >= sizeLimit) {
             unUsed = new LinkedHashMap<>();
@@ -66,7 +66,7 @@ public class RAMCacheWriter implements CacheWriter {
     }
 
     @Override
-    public boolean invalidateByName(String name) throws IOException {
+    public boolean invalidateByName(String name) {
         Data data = cache.remove(new SoftReference<>(name));
         return data != null;
     }

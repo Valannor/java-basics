@@ -31,10 +31,12 @@ public class FlexibleCacheSystem implements CacheSystem {
     }
 
     /**
+     * Constructor creates TWO level caching system, which stores data both in RAM and HDD memory.
+     *
      * @param ramLimitSize    - RAM memory limit
      * @param hddLimitSize    - HDD memory limit. Max disk space for caching. Specifies in bytes.
      * @param cacheAllocation - Package, where HDDCacheWriter will store data.
-     * @param strategy        - Strategy of data storing (LRU or MRU)
+     * @param strategy        - Strategy of data storing (LRU or MRU).
      */
     public FlexibleCacheSystem(int ramLimitSize, int hddLimitSize, String cacheAllocation, Strategy strategy) {
         this(ramLimitSize, strategy);
@@ -113,13 +115,9 @@ public class FlexibleCacheSystem implements CacheSystem {
      */
     @Override
     public void remove(String name) {
-        try {
-            ramCacheWriter.invalidateByName(name);
-            if (hddCacheWriter != null) {
-                hddCacheWriter.invalidateByName(name);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        ramCacheWriter.invalidateByName(name);
+        if (hddCacheWriter != null) {
+            hddCacheWriter.invalidateByName(name);
         }
     }
 

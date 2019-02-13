@@ -2,6 +2,10 @@ package com.practice.cache.utils;
 
 import java.io.Serializable;
 
+/**
+ * Class which stores data for caching.
+ * Serializable and immutable.
+ */
 public final class Data implements Serializable {
 
     private final String value;
