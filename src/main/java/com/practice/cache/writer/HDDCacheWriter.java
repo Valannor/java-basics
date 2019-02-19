@@ -142,7 +142,7 @@ public class HDDCacheWriter implements CacheWriter {
     /**
      * Implementation of the invalidateUnused method in superinterface.
      * If currentSize counter reached sizeLimit, method locates directory with cached data and creates an array of java.io.File objects.
-     * Arrays checks for null and get sorted according Strategy, specified for current writer.
+     * Array checks for null and get sorted according Strategy, specified for current writer.
      * After this system removes cache files, until currentSize counter is less than half of the sizeLimit.
      *
      * @return - In this implementation it always returns null
