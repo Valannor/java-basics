@@ -214,18 +214,22 @@ public class HashMap<K, V> {
     @Override
     public String toString() {
 
-        StringBuilder builder = new StringBuilder("[ ");
+        StringBuilder builder = new StringBuilder("{");
 
+        int count = 0;
         for (Pair<K, V> temp : elementData) {
             while (temp != null) {
-                builder.append("{").append(temp.key)
-                        .append(":").append(temp.value).append("} ");
+                builder.append(temp.key)
+                        .append("=").append(temp.value);
 
+                if (count < size - 1)
+                    builder.append(", ");
                 temp = temp.next;
             }
+            count++;
         }
 
-        builder.append("]");
+        builder.append("}");
 
         return builder.toString();
     }
